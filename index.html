@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Поймай квадрат</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        #game-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            border: 2px solid #000;
+            background-color: white;
+        }
+        #square {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background-color: red;
+            cursor: pointer;
+        }
+        #info {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="info">
+        <p>Очки: <span id="score">0</span></p>
+        <p>Время: <span id="timer">30</span> сек</p>
+    </div>
+    <div id="game-container">
+        <div id="square"></div>
+    </div>
+    <script>
+        let score = 0;
+        let timeLeft = 30;
+        const scoreDisplay = document.getElementById("score");
+        const timerDisplay = document.getElementById("timer");
+        const square = document.getElementById("square");
+        const gameContainer = document.getElementById("game-container");
+
+        function moveSquare() {
+            const maxX = gameContainer.clientWidth - square.clientWidth;
+            const maxY = gameContainer.clientHeight - square.clientHeight;
+            const newX = Math.floor(Math.random() * maxX);
+            const newY = Math.floor(Math.random() * maxY);
+            square.style.left = `${newX}px`;
+            square.style.top = `${newY}px`;
+        }
+
+        square.addEventListener("click", () => {
+            if (timeLeft > 0) {
+                score++;
+                scoreDisplay.textContent = score;
+                moveSquare();
+            }
+        });
+
+        function updateTimer() {
+            if (timeLeft > 0) {
+                timeLeft--;
+                timerDisplay.textContent = timeLeft;
+            } else {
+                clearInterval(timerInterval);
+                alert(`Игра окончена! Ваш счет: ${score}`);
+            }
+        }
+
+        moveSquare();
+        const timerInterval = setInterval(updateTimer, 1000);
+    </script>
+</body>
+</html>
